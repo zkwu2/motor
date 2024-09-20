@@ -12,7 +12,7 @@ static int32_t state_fun_start(robot_state_t *self, int32_t event)
 			loge("[robot_state]default stat skip\n");
 			break;
 	}
-	return ROBOT_STATE_REV_DEEL;
+	return ROBOT_STATE_REV_DEAL;
 }
 
 void robot_state_init(state_fun_t start_fun)
@@ -76,7 +76,7 @@ int32_t robot_state_run(void)
 
 		switch(rev)
 		{
-			case ROBOT_STATE_REV_DEEL:
+			case ROBOT_STATE_REV_DEAL:
 				break;
 			case ROBOT_STATE_REV_BACK:
 				return rev;

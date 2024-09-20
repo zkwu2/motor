@@ -51,7 +51,7 @@ int32_t app_main(robot_state_t *self, int32_t event)
         default:
             return ROBOT_STATE_REV_SKIP;
     }
-    return ROBOT_STATE_REV_DEEL;
+    return ROBOT_STATE_REV_DEAL;
 }
 
 void robot_main(void)

@@ -20,5 +20,5 @@ int32_t state_setting(robot_state_t *self, int32_t event)
         default:
             return ROBOT_STATE_REV_SKIP;
     }
-    return ROBOT_STATE_REV_DEEL;
+    return ROBOT_STATE_REV_DEAL;
 }

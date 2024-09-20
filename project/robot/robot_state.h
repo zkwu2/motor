@@ -5,7 +5,7 @@
 
 typedef enum
 {
-	ROBOT_STATE_REV_DEEL = 0,   //收到的事件在这个场景里面处理掉了
+	ROBOT_STATE_REV_DEAL = 0,   //收到的事件在这个场景里面处理掉了
 	ROBOT_STATE_REV_SKIP,       //收到的事件在这个场景里面被忽略掉
 	ROBOT_STATE_REV_GOTO,       //状态发生跳转
 	ROBOT_STATE_REV_BACK,       //状态返回
