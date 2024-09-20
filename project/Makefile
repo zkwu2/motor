@@ -7,7 +7,7 @@ OUT      = $(PWD_DIR)/out
 MAKE     = make
 
 CC       = gcc
-CFLAGS   = -Wall -O -I $(INC_DIR)
+CFLAGS   = -Wall -O -I $(INC_DIR)  #-I 用于指定头文件的搜索路径
 
 export PWD_DIR ROBOT_DIR APP_DIR OBJ_DIR INC_DIR CC CFLAGS OUT
 #导出以上变量给子目录下的Makefile使用
