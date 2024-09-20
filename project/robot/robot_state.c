@@ -78,6 +78,8 @@ int32_t robot_state_run(void)
 		{
 			case ROBOT_STATE_REV_DEEL:
 				break;
+			case ROBOT_STATE_REV_BACK:
+				return rev;
 			case ROBOT_STATE_REV_SKIP:
 				logi("<<Negative>>\n");
 				break;
@@ -85,4 +87,53 @@ int32_t robot_state_run(void)
 				logi("[state]run ERR rev:%d\n", rev);
 		}
 	}
+}
+
+int32_t _robot_state_call(state_fun_t fun, void *p0, void *p1, void *p2, void *p3, void *p4)
+{
+	int32_t rev;
+	robot_t *robot = &robot_one;
+	robot_state_t *cur, *state;
+	
+    cur = &robot->state_buf[robot->index];
+	if(cur == robot->end)
+	{
+		robot->ret_val = (void *)-1;
+		loge("[state]call ERR cur is Last state!\n");
+		return -1;
+	}
+    
+	robot->index++;
+	state = &robot->state_buf[robot->index];
+    memset(state, 0, sizeof(*state));
+	state->fun = fun;
+	state->parm[0] = p0;
+	state->parm[1] = p1;
+	state->parm[2] = p2;
+	state->parm[3] = p3;
+	state->parm[4] = p4;
+	robot_eve_post(EVE_STAT_ENTER);
+	rev = robot_state_run();
+    if(rev == ROBOT_STATE_REV_BACK)
+    { 
+        logi("<<%s>>\n", robot_eve_get_name(EVE_STAT_RESUME));
+		cur->fun(cur, EVE_STAT_RESUME);
+    }
+	return rev;
+}  
+
+int32_t _robot_state_back(void *bak_val)
+{
+	robot_t *robot = &robot_one;
+	robot_state_t *cur = &robot->state_buf[robot->index];
+	if(cur == robot->first)
+	{
+        return ROBOT_STATE_REV_ERR;
+	}
+	robot->ret_val = bak_val;
+	robot->index--;
+	logi("<<%s>>\n", robot_eve_get_name(EVE_STAT_EXIT));
+	cur->fun(cur, EVE_STAT_EXIT);
+
+	return ROBOT_STATE_REV_BACK;
 }

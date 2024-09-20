@@ -1,7 +1,7 @@
 #ifndef __ROBOT_STATE_H__
 #define __ROBOT_STATE_H__
 
-#include "stdint.h"
+#include "robot.h"
 
 typedef enum
 {
@@ -24,10 +24,7 @@ typedef int32_t (*state_fun_t)(robot_state_t *self, int32_t eve);
 #define PARAM2          2
 #define PARAM3          3
 #define PARAM4          4
-#define PARAM5          5
-#define PARAM6          6
-#define PARAM7          7
-#define STAT_PARM_NUM	8
+#define STAT_PARM_NUM	5
 
 #define STAT_NAME_SIZE  32
 #define STATE_NUM		20
@@ -62,18 +59,57 @@ typedef struct robot_struct
 {
 	int32_t index;
 	void* ret_val;
-    robot_state_t def;
 	robot_state_t *first;
 	robot_state_t *end;
 	robot_state_t state_buf[STATE_NUM];
     robot_global_t global[ROBOT_PRIO_NUM];
-    state_fun_t fun_todo;
-    robot_state_t state_todo;
     int32_t eve_timeout; //接收事件的超时时间
 }robot_t;
+
+extern robot_t robot_one;
+
+#define robot_state_retval()   (robot_one.ret_val)
 
 void robot_state_init(state_fun_t start_fun);
 
 int32_t robot_state_run(void);
+
+int32_t _robot_state_call(state_fun_t fun, void *p0, void *p1, void *p2, void *p3, void *p4);
+
+int32_t _robot_state_back(void *bak_val);
+
+#define robot_state_call(fun, p0, p1, p2, p3, p4)            \
+do{                                                          \
+	int32_t _rev; 											 \
+	logi("[CALL][%s]\n", #fun); 						     \
+	_rev = _robot_state_call((fun), (void *)(p0),            \
+                      (void *)(p1), (void *)(p2),            \
+                      (void *)(p3), (void *)(p4));           \
+    if(_rev != ROBOT_STATE_REV_BACK)                         \
+	{ 														 \
+		return _rev; 						                 \
+	} 														 \
+	else if(_rev == -1) 									 \
+	{ 														 \
+		logi("[CALL][%s]failed!\n", #fun); 	  		         \
+	} 														 \
+}while(0)
+
+#define robot_state_call0(fun)   robot_state_call(fun, NULL, NULL, NULL, NULL, NULL)
+#define robot_state_call1(fun, p0)   robot_state_call(fun, p0, NULL, NULL, NULL, NULL)
+#define robot_state_call2(fun, p0, p1)   robot_state_call(fun, p0, p1, NULL, NULL, NULL)
+#define robot_state_call3(fun, p0, p1, p2)  robot_state_call(fun, p0, p1, p2, NULL, NULL)
+#define robot_state_call4(fun, p0, p1, p2, p3)  robot_state_call(fun, p0, p1, p2, p3, NULL)
+
+#define robot_state_back(val)              \
+do{ 		                               \
+	int32_t _rev; 						   \
+	_rev = _robot_state_back((void *)val); \
+	if(_rev == ROBOT_STATE_REV_BACK) 	   \
+ 	{ 									   \
+		logi("[BACK]\n"); 			       \
+	} 									   \
+	return _rev; 	                       \
+}while(0)
 
 #endif

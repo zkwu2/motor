@@ -24,6 +24,7 @@ static void robot_set_before_run(void)
     signal(SIGQUIT, sig_handler); //Ctr + '\'
 }
 
+extern int32_t state_setting(robot_state_t *self, int32_t event);
 int32_t app_main(robot_state_t *self, int32_t event)
 {
     switch(event)
@@ -34,9 +35,16 @@ int32_t app_main(robot_state_t *self, int32_t event)
         case EVE_STAT_EXIT:
             robot_state_show_exit();
             break;
-        case EVE_STAT_BACK:
+        case EVE_STAT_RESUME:
+            {
+                void *ret_void = robot_state_retval();
+                long ret_val = (long)ret_void;
+                logi("[app_main]resume, get back data: %d\n", (int32_t)ret_val);
+            }
             break;
         case EVE_UI_EVT1:
+            robot_state_call0(state_setting);
+            logi("[app_main]call state_setting after\n");
             break;
         case EVE_UI_EVT2:
             break;

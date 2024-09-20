@@ -4,7 +4,6 @@ const char *eve_name_buf[]=
 {
     "STAT_ENTER",
 	"STAT_EXIT",
-	"STAT_BACK",
 	"STAT_RESUME",
 
     "PWR_ON",

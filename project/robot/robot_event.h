@@ -12,7 +12,6 @@ typedef enum
 	
     EVE_STAT_ENTER = EVE_SYS_START,
     EVE_STAT_EXIT,
-	EVE_STAT_BACK,
 	EVE_STAT_RESUME,
 
     EVE_PWR_ON,
