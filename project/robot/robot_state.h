@@ -42,19 +42,6 @@ typedef struct robot_global_struct
     robot_state_t *self; //设置global的时候可以设置一个状态机
 }robot_global_t;
 
-typedef enum
-{
-    ROBOT_PRIO0 = 0,
-    ROBOT_PRIO1,
-    ROBOT_PRIO2,
-    ROBOT_PRIO3,
-    ROBOT_PRIO4,
-    ROBOT_PRIO5,
-    ROBOT_PRIO6,
-    ROBOT_PRIO7,
-    ROBOT_PRIO_NUM
-}robot_global_prio_t;
-
 typedef struct robot_struct
 {
 	int32_t index;
@@ -62,15 +49,14 @@ typedef struct robot_struct
 	robot_state_t *first;
 	robot_state_t *end;
 	robot_state_t state_buf[STATE_NUM];
-    robot_global_t global[ROBOT_PRIO_NUM];
-    int32_t eve_timeout; //接收事件的超时时间
+    state_fun_t global_fun;
 }robot_t;
 
 extern robot_t robot_one;
 
 #define robot_state_retval()   (robot_one.ret_val)
 
-void robot_state_init(state_fun_t start_fun);
+void robot_state_init(state_fun_t start_fun, state_fun_t global_fun);
 
 int32_t robot_state_run(void);
 

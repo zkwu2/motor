@@ -63,12 +63,8 @@ static int32_t robot_eve_fetch(void)
 	return eve;
 }
 
-int32_t robot_eve_wait_fetch(int32_t wait)
+int32_t robot_eve_wait_fetch(void)
 {
-	if(wait <= 0)
-	{
-		return robot_eve_fetch();
-	}
 	return robot_eve_fetch();
 }
 

@@ -31,6 +31,6 @@ void log_show(loglevel level, const char *format, ...);
 #define loge(...)   log_show(ROBOT_LOG_LEVEL_ERROR, __VA_ARGS__)
 
 void robot_init(void);
-void *robot_run(void *parm);
+void *robot_run(void *parm0, void *parm1);
 
 #endif

@@ -25,6 +25,7 @@ static void robot_set_before_run(void)
 }
 
 extern int32_t state_setting(robot_state_t *self, int32_t event);
+extern int32_t state_global_eve_deal(robot_state_t *self, int32_t event);
 int32_t app_main(robot_state_t *self, int32_t event)
 {
     switch(event)
@@ -47,6 +48,7 @@ int32_t app_main(robot_state_t *self, int32_t event)
             logi("[app_main]call state_setting after\n");
             break;
         case EVE_UI_EVT2:
+            robot_eve_post(EVE_PWR_OFF);
             break;
         default:
             return ROBOT_STATE_REV_SKIP;
@@ -59,7 +61,7 @@ void robot_main(void)
     logi("[robot_main]start\n");
     robot_init();
     robot_set_before_run();
-    robot_run(app_main);
+    robot_run(app_main, state_global_eve_deal);
     while(1)
     {
 		os_thread_sleep(40);

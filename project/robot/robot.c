@@ -16,9 +16,9 @@ void robot_init(void)
     robot_eve_init();
 }
 
-void *robot_run(void *parm)
+void *robot_run(void *parm0, void *parm1)
 {
-	robot_state_init(parm);
+	robot_state_init(parm0, parm1);
 	robot_state_run();
     return NULL;
 }
