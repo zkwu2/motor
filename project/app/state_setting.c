@@ -11,10 +11,11 @@ int32_t state_setting(robot_state_t *self, int32_t event)
             robot_state_show_exit();
             break;
         case EVE_UI_EVT1:
-            robot_state_back((void *)10);
+            // robot_state_back((void *)10);
+            robot_state_call0(state_setting);
             break;
         case EVE_UI_EVT2:
-            robot_eve_post(EVE_PWR_OFF);
+            robot_state_goto0(state_setting);
             break;
         default:
             return ROBOT_STATE_REV_SKIP;

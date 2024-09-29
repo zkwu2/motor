@@ -45,7 +45,6 @@ int32_t app_main(robot_state_t *self, int32_t event)
             break;
         case EVE_UI_EVT1:
             robot_state_call0(state_setting);
-            logi("[app_main]call state_setting after\n");
             break;
         case EVE_UI_EVT2:
             robot_eve_post(EVE_PWR_OFF);

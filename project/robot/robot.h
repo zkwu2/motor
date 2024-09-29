@@ -6,7 +6,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "stdint.h"
 #include "robot_event.h"
 #include "robot_state.h"

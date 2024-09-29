@@ -33,7 +33,7 @@ typedef enum
 void robot_eve_init(void);
 char *robot_eve_get_name(int32_t eve);
 void robot_eve_post(int32_t eve);
-int32_t robot_eve_wait_fetch(void);
+int32_t robot_eve_fetch(void);
 int32_t robot_eve_chk(int32_t eve);
 void robot_eve_clr(int32_t eve);
 

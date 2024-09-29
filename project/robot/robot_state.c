@@ -43,7 +43,7 @@ int32_t robot_state_run(void)
 	while(1)
 	{
         cur = &robot->state_buf[robot->index];
-		eve = robot_eve_wait_fetch();
+		eve = robot_eve_fetch();
 		if(eve < 0 || cur->fun == NULL)
 		{
 			continue;
@@ -65,6 +65,8 @@ int32_t robot_state_run(void)
 				break;
 			case ROBOT_STATE_REV_BACK:
 				return rev;
+			case ROBOT_STATE_REV_GOTO:
+				break;
 			case ROBOT_STATE_REV_SKIP:
 				logi("<<Negative>>\n");
 				break;
@@ -74,6 +76,7 @@ int32_t robot_state_run(void)
 	}
 }
 
+//call场景退出后，会先执行上一个场景中EVE_STAT_RESUME中的操作，再执行上一个场景中调用robot_state_call()函数后的操作
 int32_t _robot_state_call(state_fun_t fun, void *p0, void *p1, void *p2, void *p3, void *p4)
 {
 	int32_t rev;
@@ -84,13 +87,13 @@ int32_t _robot_state_call(state_fun_t fun, void *p0, void *p1, void *p2, void *p
 	if(cur == robot->end)
 	{
 		robot->ret_val = (void *)-1;
-		loge("[state]call ERR cur is Last state!\n");
+		loge("[state err]current state is the last state!!!\n");
 		return -1;
 	}
     
 	robot->index++;
 	state = &robot->state_buf[robot->index];
-    memset(state, 0, sizeof(*state));
+    memset(state, 0, sizeof(robot_state_t));
 	state->fun = fun;
 	state->parm[0] = p0;
 	state->parm[1] = p1;
@@ -105,7 +108,30 @@ int32_t _robot_state_call(state_fun_t fun, void *p0, void *p1, void *p2, void *p
 		cur->fun(cur, EVE_STAT_RESUME);
     }
 	return rev;
-}  
+} 
+
+//调用robot_state_goto()函数后，当前场景中的其他代码就不执行了，并且依次执行历史场景中的EVE_STAT_EXIT
+void _robot_state_goto(state_fun_t fun, void *p0, void *p1, void *p2, void *p3, void *p4)
+{
+	robot_t *robot = &robot_one;
+	robot_state_t *state;
+	for(int32_t i = robot->index; i >= 0; i--)
+	{
+		state = &robot->state_buf[i];
+	    logi("<<%s>>\n", robot_eve_get_name(EVE_STAT_EXIT));
+		state->fun(state, EVE_STAT_EXIT);
+	}
+	robot->index = 0;
+	state = &robot->state_buf[0];
+    memset(state, 0, sizeof(robot_state_t));
+	state->fun = fun;
+	state->parm[0] = p0;
+	state->parm[1] = p1;
+	state->parm[2] = p2;
+	state->parm[3] = p3;
+	state->parm[4] = p4;
+	robot_eve_post(EVE_STAT_ENTER);
+}
 
 int32_t _robot_state_back(void *bak_val)
 {

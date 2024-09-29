@@ -23,7 +23,7 @@ const char *eve_name_buf[]=
 };
 
 #define EVE_TOTAL_NUM (EVE_SYS_END - EVE_SYS_START)
-char eve_map_buf[EVE_TOTAL_NUM];
+static char eve_map_buf[EVE_TOTAL_NUM];
 
 static void robot_eve_reset_all(void)
 {	
@@ -47,7 +47,7 @@ void robot_eve_post(int32_t eve)
 	eve_map_buf[eve] = 1;
 }
 
-static int32_t robot_eve_fetch(void)
+int32_t robot_eve_fetch(void)
 {
 	int eve = -1;
 	for(int i = 0; i < EVE_TOTAL_NUM; i++)
@@ -61,11 +61,6 @@ static int32_t robot_eve_fetch(void)
 		}
 	}
 	return eve;
-}
-
-int32_t robot_eve_wait_fetch(void)
-{
-	return robot_eve_fetch();
 }
 
 int32_t robot_eve_chk(int32_t eve)
