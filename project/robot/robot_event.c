@@ -9,6 +9,9 @@ const char *eve_name_buf[]=
     "PWR_ON",
     "PWR_OFF",
 
+	"TIMEOUT0",
+	"TIMEOUT1",
+
 	"KEYD01",
 	"KEYU01",
 	"KEYS01",

@@ -17,6 +17,9 @@ typedef enum
     EVE_PWR_ON,
     EVE_PWR_OFF,
 
+	EVE_TIMEOUT0,
+	EVE_TIMEOUT1,
+
 	EVE_KEYD01,                    
 	EVE_KEYU01,
 	EVE_KEYS01,

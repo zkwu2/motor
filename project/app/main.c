@@ -1,5 +1,6 @@
 
 #include "robot.h"
+#include "hw_timer.h"
 #include <signal.h>
 
 static void sig_handler(int sig)
@@ -49,6 +50,10 @@ int32_t app_main(robot_state_t *self, int32_t event)
         case EVE_UI_EVT2:
             robot_eve_post(EVE_PWR_OFF);
             break;
+        case EVE_TIMEOUT0:
+            break;
+        case EVE_TIMEOUT1:
+            break;
         default:
             return ROBOT_STATE_REV_SKIP;
     }
@@ -59,6 +64,7 @@ void robot_main(void)
 {
     logi("[robot_main]start\n");
     robot_init();
+    hw_timer_init();
     robot_set_before_run();
     robot_run(app_main, state_global_eve_deal);
     while(1)
