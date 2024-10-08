@@ -11,8 +11,9 @@
 #define TIMER_INTER         (1 << 0)
 #define TIMER_AUTO_START    (1 << 1)
 
-#define TIME0   0
-#define TIME1   1
+#define TIME0    0
+#define TIME1    1
+#define KEY_TIM  2
 
 typedef void(*hw_timer_cb)(int32_t data);
 
@@ -29,5 +30,9 @@ typedef struct hw_timer_struct
 int32_t hw_timer_init(void);
 
 int32_t hw_timer_start(int32_t id, uint32_t ms);
+
+int32_t hw_timer_stop(int32_t id);
+
+void hw_timer_step(int32_t ms);
 
 #endif
